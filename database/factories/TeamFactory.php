@@ -25,6 +25,7 @@ class TeamFactory extends Factory
             "name" => $this->faker->name(),
             "description" => $this->faker->text(100),
             "manager_id" => 1,
+            "leader_id" => 1,
         ];
     }
 }

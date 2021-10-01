@@ -18,6 +18,7 @@ class CreateTeamsTable extends Migration
             $table->string("name", 100)->unique();
             $table->text("description");
             $table->foreignId("manager_id")->constrained("users");
+            $table->foreignId("leader_id")->constrained("users");
             $table->timestamps();
             $table->softDeletes();
         });

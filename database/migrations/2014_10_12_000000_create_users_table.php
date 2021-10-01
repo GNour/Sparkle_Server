@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('phone_number', 20);
             $table->string('profile_picture');
             $table->boolean('gender');
-            $table->string('role');
+            $table->enum('role', ["Admin", "Manager", "Leader", "Staff"]);
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
