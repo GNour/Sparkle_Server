@@ -9,7 +9,7 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class IsManager
+class RoleAuth
 {
     /**
      * Handle an incoming request.
@@ -18,7 +18,7 @@ class IsManager
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next, ...$roles)
     {
         try {
             //Access token from the request
@@ -36,7 +36,7 @@ class IsManager
             return $this->unauthorized('Please, attach a Bearer Token to your request');
         }
         //If user was authenticated successfully and user is in one of the acceptable roles, send to next request.
-        if ($user && $user->is_manager == 1) {
+        if ($user && $user->in_array($user->role, $roles)) {
             return $next($request);
         }
 
