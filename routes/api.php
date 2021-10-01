@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,11 +15,11 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::group([
-    'middleware' => 'api',
-    'namespace' => 'App\Http\Controllers',
+    'namespace' => 'authentication',
     'prefix' => 'auth',
 ], function () {
-    Route::post('login', 'AuthController@login');
-    Route::post('logout', 'AuthController@logout');
-    Route::post('refresh', 'AuthController@refresh');
+    Route::post('/login', [AuthController::class, "login"]);
+    Route::post('/register', [AuthController::class, "register"]);
+    Route::post('/logout', [AuthController::class, "logout"]);
+    Route::post('/refresh', [AuthController::class, "refresh"]);
 });
