@@ -29,7 +29,6 @@ class User extends Authenticatable implements JWTSubject
         'phone_number',
         'profile_picture',
         'gender',
-        'is_hr',
     ];
 
     /**
@@ -70,5 +69,10 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function role()
+    {
+        return $this->hasMany(Role::class);
     }
 }
