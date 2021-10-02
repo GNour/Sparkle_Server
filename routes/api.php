@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::group([
-    'namespace' => 'Authenticate',
+    'namespace' => 'App\Http\Controllers',
     'prefix' => 'auth',
 ], function () {
     Route::post('/login', [AuthController::class, "login"]);
@@ -25,4 +25,17 @@ Route::group([
         Route::post('/logout', [AuthController::class, "logout"]);
         Route::post('/refresh', [AuthController::class, "refresh"]);
     });
+});
+
+Route::group([
+    'namespace' => 'App\Http\Controllers',
+    'prefix' => 'team',
+], function () {
+
+    Route::get("/all", "TeamController@getTeams");
+    Route::get("/allWithMembers", "TeamController@getTeamsWithMembers");
+    Route::get("/userTeam", "TeamController@getUserTeam");
+    Route::post("/create", "TeamController@createTeam");
+    Route::post("/delete", "TeamController@deleteTeam");
+    Route::put('edit/{id}', "TeamController@updateTeam");
 });
