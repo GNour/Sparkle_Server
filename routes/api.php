@@ -36,8 +36,8 @@ Route::group([
         'prefix' => 'team',
     ], function () {
         Route::get("/userTeam", "TeamController@getUserTeam");
+        Route::get("/show/{team}", "TeamController@getTeam"); // Policy Protected Route -- TeamPolicy
 
-        Route::get("/show/{team}", "TeamController@getTeam");
         Route::middleware(['auth.role:Admin,Manager'])->group(function () {
             Route::get("/all", "TeamController@getTeams");
             Route::get("/allWithMembers", "TeamController@getTeamsWithMembers");
@@ -45,7 +45,20 @@ Route::group([
             Route::delete("/delete/{team}", "TeamController@deleteTeam");
             Route::put('edit/{id}', "TeamController@updateTeam");
         });
+    });
 
+    Route::group([
+        'namespace' => 'App\Http\Controllers',
+        'prefix' => 'user',
+    ], function () {
+        Route::get("/show/{user}", "UserController@show"); // Policy Protected Route -- UserPolicy@viewOrUpdate
+        Route::post('edit/{user}', "UserController@update"); // Policy Protected Route -- UserPolicy@viewOrUpdate
+
+        Route::middleware(['auth.role:Admin,Manager'])->group(function () {
+            Route::get("/all", "UserController@getAllUsers");
+            Route::get("/allWithTeam", "UserController@getUsersWithTeam");
+            Route::delete("/delete/{user}", "UserController@destroy");
+        });
     });
 
 });

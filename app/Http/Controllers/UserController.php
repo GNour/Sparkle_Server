@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -11,8 +12,10 @@ class UserController extends Controller
      * Display a listing of the users.
      *
      * @return \Illuminate\Http\Response
+     *
+     * Protected using auth.role middleware.
      */
-    public function index()
+    public function getAllUsers()
     {
         return response()->json(User::all()->toArray());
     }
@@ -21,6 +24,8 @@ class UserController extends Controller
      * Display a listing of the users with their teams.
      *
      * @return \Illuminate\Http\Response
+     *
+     * Protected using auth.role middleware.
      */
     public function getUsersWithTeam()
     {
@@ -28,46 +33,19 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
+     *
+     * Policy Protected check UserPolicy
      */
     public function show(User $user)
     {
-        return response()->json($user->load(["team"]));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(User $user)
-    {
-        //
+        if (auth()->user()->can('view', $user)) {
+            return response()->json($user->load(["team"]));
+        }
+        return response()->json(["message" => "Not Authorized!"], 403);
     }
 
     /**
@@ -76,10 +54,36 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
+     *
+     * Policy Protected check UserPolicy
      */
     public function update(Request $request, User $user)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'username' => 'required|string|between:2,100',
+            'first_name' => 'required|string|between:2,100',
+            'last_name' => 'required|string|between:2,100',
+            'gender' => 'required',
+            'phone_number' => 'required|between:7,15',
+            'email' => 'required|string|email|max:100|unique:users',
+            'profile_picture' => 'nullable',
+            'role' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors()->toJson(), 400);
+        }
+
+        if (auth()->user()->can('update', $user)) {
+            $user = $user->update($validator->validated());
+
+            return response()->json([
+                'message' => 'User edited successfully',
+                'updated' => $user,
+            ], 200);
+        }
+        return response()->json(["message" => "Not Authorized!"], 403);
+
     }
 
     /**
@@ -87,9 +91,15 @@ class UserController extends Controller
      *
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
+     *
+     * Protected using auth.role middleware.
      */
     public function destroy(User $user)
     {
-        //
+        $user->delete();
+        return response()->json([
+            'message' => 'User successfully deleted',
+            'user' => $user,
+        ], 201);
     }
 }
