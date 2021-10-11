@@ -10,22 +10,25 @@ use Illuminate\Support\Facades\Validator;
 
 class TeamController extends Controller
 {
-
+    // Protected using auth.role middleware.
     public function getTeams()
     {
         return response()->json(Team::all()->toArray());
     }
 
+    // Protected using auth.role middleware.
     public function getTeamsWithMembers()
     {
         return response()->json(Team::with(["members", "leader", "manager"])->get());
     }
 
+    // No need for protection. Accessing team using auth()
     public function getUserTeam()
     {
         return response()->json(auth()->user()->team);
     }
 
+    // Policy protected check TeamPolicy
     public function getTeam(Team $team)
     {
         if (auth()->user()->can('view', $team)) {
@@ -34,6 +37,7 @@ class TeamController extends Controller
         return response()->json(["message" => "Not Authorized!"], 403);
     }
 
+    // Protected using auth.role middleware.
     public function createTeam(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -54,6 +58,7 @@ class TeamController extends Controller
         ], 201);
     }
 
+    // Protected using auth.role middleware.
     public function deleteTeam(Team $team)
     {
         $team->delete();
@@ -64,6 +69,7 @@ class TeamController extends Controller
         ], 201);
     }
 
+    // Protected using auth.role middleware.
     public function updateTeam(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
