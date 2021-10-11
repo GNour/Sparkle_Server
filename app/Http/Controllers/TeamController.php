@@ -26,6 +26,14 @@ class TeamController extends Controller
         return response()->json(auth()->user()->team);
     }
 
+    public function getTeam(Team $team)
+    {
+        if (auth()->user()->can('view', $team)) {
+            return response()->json($team);
+        }
+        return response()->json(["message" => "Not Authorized!"], 403);
+    }
+
     public function createTeam(Request $request)
     {
         $validator = Validator::make($request->all(), [

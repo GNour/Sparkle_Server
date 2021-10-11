@@ -28,14 +28,24 @@ Route::group([
 });
 
 Route::group([
-    'namespace' => 'App\Http\Controllers',
-    'prefix' => 'team',
+    'middleware' => 'auth:api',
 ], function () {
 
-    Route::get("/all", "TeamController@getTeams");
-    Route::get("/allWithMembers", "TeamController@getTeamsWithMembers");
-    Route::get("/userTeam", "TeamController@getUserTeam");
-    Route::post("/create", "TeamController@createTeam");
-    Route::post("/delete", "TeamController@deleteTeam");
-    Route::put('edit/{id}', "TeamController@updateTeam");
+    Route::group([
+        'namespace' => 'App\Http\Controllers',
+        'prefix' => 'team',
+    ], function () {
+        Route::get("/userTeam", "TeamController@getUserTeam");
+
+        Route::get("/show/{team}", "TeamController@getTeam");
+        Route::middleware(['auth.role:Admin,Manager'])->group(function () {
+            Route::get("/all", "TeamController@getTeams");
+            Route::get("/allWithMembers", "TeamController@getTeamsWithMembers");
+            Route::post("/create", "TeamController@createTeam");
+            Route::post("/delete", "TeamController@deleteTeam");
+            Route::put('edit/{id}', "TeamController@updateTeam");
+        });
+
+    });
+
 });
