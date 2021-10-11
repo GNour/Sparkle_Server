@@ -80,6 +80,23 @@ Route::group([
             Route::post("/create", "CourseController@store");
             Route::put("/edit/{course}", "CourseController@update");
             Route::delete("/delete/{course}", "CourseController@destroy");
+
+            Route::group([
+                'prefix' => 'article',
+            ], function () {
+                Route::post("/create", "ArticleController@store");
+                Route::put("/edit/{article}", "ArticleController@update");
+                Route::delete("/delete/{article}", "ArticleController@destroy");
+            });
+
+            Route::group([
+                'prefix' => 'video',
+            ], function () {
+                Route::post("/create", "VideoController@store");
+                Route::put("/edit/{video}", "VideoController@update");
+                Route::delete("/delete/{video}", "VideoController@destroy");
+            });
+
         });
     });
 
