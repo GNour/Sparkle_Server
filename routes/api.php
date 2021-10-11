@@ -72,4 +72,15 @@ Route::group([
         });
     });
 
+    Route::group([
+        'namespace' => 'App\Http\Controllers\Course',
+        'prefix' => 'course',
+    ], function () {
+        Route::middleware(['auth.role:Admin,Manager,Leader'])->group(function () {
+            Route::post("/create", "CourseController@store");
+            Route::put("/edit/{course}", "CourseController@update");
+            Route::delete("/delete/{course}", "CourseController@destroy");
+        });
+    });
+
 });
