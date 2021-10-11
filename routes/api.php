@@ -98,6 +98,22 @@ Route::group([
                 Route::delete("/delete/{video}", "VideoController@destroy");
             });
 
+            Route::group([
+                'prefix' => 'quiz',
+            ], function () {
+                Route::post("/create", "QuizController@store");
+                Route::put("/edit/{quiz}", "QuizController@update");
+                Route::delete("/delete/{quiz}", "QuizController@destroy");
+
+                Route::group([
+                    'prefix' => 'question',
+                ], function () {
+                    Route::post("/create", "QuestionController@store");
+                    Route::put("/edit/{question}", "QuestionController@update");
+                    Route::delete("/delete/{question}", "QuestionController@destroy");
+                });
+            });
+
         });
     });
 
