@@ -92,7 +92,8 @@ Route::group([
             Route::group([
                 'prefix' => 'video',
             ], function () {
-                Route::post("/create", "VideoController@store");
+                Route::post("/create", "VideoController@uploadVideo");
+                Route::post("/createViaUrl", "VideoController@uploadVideoViaUrl");
                 Route::put("/edit/{video}", "VideoController@update");
                 Route::delete("/delete/{video}", "VideoController@destroy");
             });
