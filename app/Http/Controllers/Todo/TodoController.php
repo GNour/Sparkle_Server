@@ -5,28 +5,10 @@ namespace App\Http\Controllers\Todo;
 use App\Http\Controllers\Controller;
 use App\Models\Todo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class TodoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -36,29 +18,21 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|between:1,100',
+            'description' => 'required|string',
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Todo  $todo
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Todo $todo)
-    {
-        //
-    }
+        if ($validator->fails()) {
+            return response()->json($validator->errors()->toJson(), 400);
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Todo  $todo
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Todo $todo)
-    {
-        //
+        $todo = Todo::create($validator->validated());
+
+        return response()->json([
+            'message' => 'Todo Created Successfully',
+            'todo' => $todo,
+        ], 201);
     }
 
     /**
@@ -70,7 +44,21 @@ class TodoController extends Controller
      */
     public function update(Request $request, Todo $todo)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|between:1,100',
+            'description' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors()->toJson(), 400);
+        }
+
+        $todo = $todo->update($validator->validated());
+
+        return response()->json([
+            'message' => 'Todo edited successfully',
+            'updated' => $todo,
+        ], 200);
     }
 
     /**
@@ -81,6 +69,10 @@ class TodoController extends Controller
      */
     public function destroy(Todo $todo)
     {
-        //
+        $todo->delete();
+        return response()->json([
+            'message' => 'Todo successfully deleted',
+            'todo' => $todo,
+        ], 200);
     }
 }

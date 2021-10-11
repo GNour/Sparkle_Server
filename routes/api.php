@@ -51,13 +51,24 @@ Route::group([
         'namespace' => 'App\Http\Controllers',
         'prefix' => 'user',
     ], function () {
-        Route::get("/show/{user}", "UserController@show"); // Policy Protected Route -- UserPolicy@viewOrUpdate
-        Route::post('edit/{user}', "UserController@update"); // Policy Protected Route -- UserPolicy@viewOrUpdate
+        Route::get("/show/{user}", "UserController@show"); // Policy Protected Route -- UserPolicy@view
+        Route::post('edit/{user}', "UserController@update"); // Policy Protected Route -- UserPolicy@update
 
         Route::middleware(['auth.role:Admin,Manager'])->group(function () {
             Route::get("/all", "UserController@getAllUsers");
             Route::get("/allWithTeam", "UserController@getUsersWithTeam");
             Route::delete("/delete/{user}", "UserController@destroy");
+        });
+    });
+
+    Route::group([
+        'namespace' => 'App\Http\Controllers\Todo',
+        'prefix' => 'todo',
+    ], function () {
+        Route::middleware(['auth.role:Admin,Manager,Leader'])->group(function () {
+            Route::post("/create", "TodoController@store");
+            Route::put("/edit/{todo}", "TodoController@update");
+            Route::delete("/delete/{todo}", "TodoController@destroy");
         });
     });
 
