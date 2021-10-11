@@ -54,17 +54,8 @@ class TeamController extends Controller
         ], 201);
     }
 
-    public function deleteTeam(Request $request)
+    public function deleteTeam(Team $team)
     {
-        $validator = Validator::make($request->all(), [
-            'team_id' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors()->toJson(), 400);
-        }
-
-        $team = Team::find($request->team_id);
         $team->delete();
 
         return response()->json([

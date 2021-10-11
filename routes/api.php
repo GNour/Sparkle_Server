@@ -42,7 +42,7 @@ Route::group([
             Route::get("/all", "TeamController@getTeams");
             Route::get("/allWithMembers", "TeamController@getTeamsWithMembers");
             Route::post("/create", "TeamController@createTeam");
-            Route::post("/delete", "TeamController@deleteTeam");
+            Route::delete("/delete/{team}", "TeamController@deleteTeam");
             Route::put('edit/{id}', "TeamController@updateTeam");
         });
 
