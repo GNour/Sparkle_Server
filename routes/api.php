@@ -67,8 +67,8 @@ Route::group([
         'middleware' => 'auth.role:Admin,Manager,Leader',
     ], function () {
         Route::post("/create", "TaskController@store");
-        Route::put("/edit/{task}", "TaskController@update");
-        Route::delete("/delete/{task}", "TaskController@destroy");
+        Route::put("/edit/{task}", "TaskController@update"); // Policy Protected Route -- TaskPolicy@deleteOrUpdate
+        Route::delete("/delete/{task}", "TaskController@destroy"); // Policy Protected Route -- TaskPolicy@deleteOrUpdate
     });
 
     Route::group([
@@ -77,8 +77,8 @@ Route::group([
     ], function () {
         Route::middleware(['auth.role:Admin,Manager,Leader'])->group(function () {
             Route::post("/create", "TodoController@store");
-            Route::put("/edit/{todo}", "TodoController@update");
-            Route::delete("/delete/{todo}", "TodoController@destroy");
+            Route::put("/edit/{todo}", "TodoController@update"); // Policy Protected Route -- TodoPolicy@deleteOrUpdate
+            Route::delete("/delete/{todo}", "TodoController@destroy"); // Policy Protected Route -- TodoPolicy@deleteOrUpdate
         });
     });
 
@@ -88,8 +88,8 @@ Route::group([
     ], function () {
         Route::middleware(['auth.role:Admin,Manager,Leader'])->group(function () {
             Route::post("/create", "CourseController@store");
-            Route::put("/edit/{course}", "CourseController@update");
-            Route::delete("/delete/{course}", "CourseController@destroy");
+            Route::put("/edit/{course}", "CourseController@update"); // Policy Protected Route -- CoursePolicy@deleteOrUpdate
+            Route::delete("/delete/{course}", "CourseController@destroy"); // Policy Protected Route -- CoursePolicy@deleteOrUpdate
 
             Route::group([
                 'prefix' => 'article',
