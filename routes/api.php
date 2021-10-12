@@ -69,6 +69,8 @@ Route::group([
         Route::post("/create", "TaskController@store");
         Route::put("/edit/{task}", "TaskController@update"); // Policy Protected Route -- TaskPolicy@deleteOrUpdate
         Route::delete("/delete/{task}", "TaskController@destroy"); // Policy Protected Route -- TaskPolicy@deleteOrUpdate
+        Route::put("/assign/{task}", "TaskController@assignTask");
+        Route::put("/unassign/{task}", "TaskController@unassignTask");
     });
 
     Route::group([

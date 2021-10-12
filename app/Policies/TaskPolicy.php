@@ -27,4 +27,14 @@ class TaskPolicy
         return false;
     }
 
+    /**
+     * Determine whether the Task can be assigned.
+     *
+     * @param  \App\Models\Task  $task
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function getAssigned(Task $task)
+    {
+        return $task->completed == 0;
+    }
 }
