@@ -19,7 +19,7 @@ class CreateQuizzesTable extends Migration
             $table->text("description");
             $table->string("title");
             $table->integer("weight");
-            $table->foreignId("course_id")->constrained("courses");
+            $table->foreignId("course_id")->constrained("courses")->onDelete("cascade");
             $table->timestamps();
             $table->softDeletes();
         });

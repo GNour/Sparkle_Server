@@ -12,6 +12,7 @@ class Todo extends Model
     protected $fillable = [
         'title',
         'description',
+        'created_by',
     ];
 
     public function tasks()

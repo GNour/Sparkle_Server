@@ -24,6 +24,7 @@ class TodoFactory extends Factory
         return [
             "title" => $this->faker->name(),
             "description" => $this->faker->text(100),
+            "created_by" => 1,
         ];
     }
 }

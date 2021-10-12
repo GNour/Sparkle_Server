@@ -27,7 +27,7 @@ class CourseController extends Controller
             return response()->json($validator->errors()->toJson(), 400);
         }
 
-        $course = Course::create($validator->validated());
+        $course = Course::create(array_merge($validator->validated(), ["created_by" => auth()->user()->id]));
 
         return response()->json([
             'message' => 'Course Created Successfully',
@@ -64,12 +64,16 @@ class CourseController extends Controller
             return response()->json($validator->errors()->toJson(), 400);
         }
 
-        $course->update($validator->validated());
+        if (auth()->user()->can("deleteOrUpdate", $course)) {
+            $course->update($validator->validated());
 
-        return response()->json([
-            'message' => 'Course edited Successfully',
-            'Course' => $course,
-        ], 200);
+            return response()->json([
+                'message' => 'Course edited Successfully',
+                'Course' => $course,
+            ], 200);
+        }
+
+        return response()->json(["message" => "Not Authorized!"], 403);
     }
 
     /**
@@ -80,10 +84,14 @@ class CourseController extends Controller
      */
     public function destroy(Course $course)
     {
-        $course->delete();
-        return response()->json([
-            'message' => 'Course successfully deleted',
-            'course' => $course,
-        ], 200);
+        if (auth()->user()->can("deleteOrUpdate", $course)) {
+            $course->delete();
+            return response()->json([
+                'message' => 'Course successfully deleted',
+                'course' => $course,
+            ], 200);
+        }
+
+        return response()->json(["message" => "Not Authorized!"], 403);
     }
 }

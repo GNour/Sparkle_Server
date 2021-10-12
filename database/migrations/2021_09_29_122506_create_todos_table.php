@@ -17,6 +17,7 @@ class CreateTodosTable extends Migration
             $table->id();
             $table->string("title", 150);
             $table->text("description");
+            $table->foreignId("created_by")->constrained("users");
             $table->timestamps();
             $table->softDeletes();
         });

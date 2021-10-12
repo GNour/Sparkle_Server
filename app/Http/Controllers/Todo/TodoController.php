@@ -27,7 +27,7 @@ class TodoController extends Controller
             return response()->json($validator->errors()->toJson(), 400);
         }
 
-        $todo = Todo::create($validator->validated());
+        $todo = Todo::create(array_merge($validator->validated(), ["created_by" => auth()->user()->id]));
 
         return response()->json([
             'message' => 'Todo Created Successfully',
@@ -53,12 +53,16 @@ class TodoController extends Controller
             return response()->json($validator->errors()->toJson(), 400);
         }
 
-        $todo = $todo->update($validator->validated());
+        if (auth()->user()->can("deleteOrUpdate", $todo)) {
+            $todo->update($validator->validated());
 
-        return response()->json([
-            'message' => 'Todo edited successfully',
-            'updated' => $todo,
-        ], 200);
+            return response()->json([
+                'message' => 'Todo edited successfully',
+                'updated' => $todo,
+            ], 200);
+        }
+
+        return response()->json(["message" => "Not Authorized!"], 403);
     }
 
     /**
@@ -69,10 +73,15 @@ class TodoController extends Controller
      */
     public function destroy(Todo $todo)
     {
-        $todo->delete();
-        return response()->json([
-            'message' => 'Todo successfully deleted',
-            'todo' => $todo,
-        ], 200);
+        if (auth()->user()->can("deleteOrUpdate", $todo)) {
+            $todo->delete();
+            return response()->json([
+                'message' => 'Todo successfully deleted',
+                'todo' => $todo,
+            ], 200);
+
+        }
+
+        return response()->json(["message" => "Not Authorized!"], 403);
     }
 }

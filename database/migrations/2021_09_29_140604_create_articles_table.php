@@ -18,7 +18,7 @@ class CreateArticlesTable extends Migration
             $table->string("title");
             $table->text("body");
             $table->string("description");
-            $table->foreignId("course_id")->constrained("courses");
+            $table->foreignId("course_id")->constrained("courses")->onDelete("cascade");
             $table->timestamps();
             $table->softDeletes();
         });

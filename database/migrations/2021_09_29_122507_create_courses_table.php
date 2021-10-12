@@ -17,6 +17,7 @@ class CreateCoursesTable extends Migration
             $table->id();
             $table->string("name");
             $table->text("description");
+            $table->foreignId("created_by")->constrained("users");
             $table->timestamps();
             $table->softDeletes();
         });
