@@ -24,12 +24,12 @@ class Task extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, "user_tasks")->withPivot(["deadline", "completed"])->withTimestamps();
     }
 
     public function teams()
     {
-        return $this->belongsToMany(Team::class);
+        return $this->belongsToMany(Team::class, "team_tasks")->withPivot(["deadline", "completed"])->withTimestamps();
     }
 
 }

@@ -16,6 +16,7 @@ class CreateTeamTasksTable extends Migration
         Schema::create('team_tasks', function (Blueprint $table) {
             $table->foreignId("team_id")->constrained("teams");
             $table->foreignId("task_id")->constrained("tasks");
+            $table->boolean("completed");
             $table->timestamp("deadline");
             $table->timestamps();
             $table->softDeletes();
