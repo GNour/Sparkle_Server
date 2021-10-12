@@ -70,7 +70,7 @@ class QuizController extends Controller
             return response()->json($validator->errors()->toJson(), 400);
         }
 
-        $quiz = $quiz->update($validator->validated());
+        $quiz->update($validator->validated());
 
         return response()->json([
             'message' => 'Quiz edited Successfully',

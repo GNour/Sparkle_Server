@@ -68,7 +68,7 @@ class QuestionController extends Controller
             return response()->json($validator->errors()->toJson(), 400);
         }
 
-        $question = $question->update($validator->validated());
+        $question->update($validator->validated());
 
         return response()->json([
             'message' => 'Question edited Successfully',

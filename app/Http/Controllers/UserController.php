@@ -75,7 +75,7 @@ class UserController extends Controller
         }
 
         if (auth()->user()->can('update', $user)) {
-            $user = $user->update($validator->validated());
+            $user->update($validator->validated());
 
             return response()->json([
                 'message' => 'User edited successfully',

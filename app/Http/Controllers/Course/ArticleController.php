@@ -57,7 +57,7 @@ class ArticleController extends Controller
             return response()->json($validator->errors()->toJson(), 400);
         }
 
-        $article = $article->update($validator->validated());
+        $article->update($validator->validated());
 
         return response()->json([
             'message' => 'Article edited Successfully',

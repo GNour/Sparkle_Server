@@ -103,7 +103,7 @@ class VideoController extends Controller
             return response()->json(['error' => $validator->errors()], 401);
         }
 
-        $video = $video->update($validator->validated());
+        $video->update($validator->validated());
 
         return response()->json([
             'message' => 'Video edited Successfully',

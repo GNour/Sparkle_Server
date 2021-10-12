@@ -64,7 +64,7 @@ class CourseController extends Controller
             return response()->json($validator->errors()->toJson(), 400);
         }
 
-        $course = $course->update($validator->validated());
+        $course->update($validator->validated());
 
         return response()->json([
             'message' => 'Course edited Successfully',
