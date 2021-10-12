@@ -54,6 +54,7 @@ class TaskController extends Controller
         $task = $taskable->tasks()->create([
             'name' => $request->name,
             'description' => $request->description,
+            'created_by' => auth()->user()->id,
         ]);
 
         return response()->json([
@@ -68,6 +69,9 @@ class TaskController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Http\Response
+     *
+     * Protected by a TaskPolicy@deleteOrUpdate
+     *
      */
     public function update(Request $request, Task $task)
     {
@@ -93,15 +97,19 @@ class TaskController extends Controller
                 $taskable = null;
         }
 
-        $task->taskable()->associate($taskable)->update([
-            'name' => $request->name,
-            'description' => $request->description,
-        ]);
+        if (auth()->user()->can("deleteOrUpdate", $task)) {
+            $task->taskable()->associate($taskable)->update([
+                'name' => $request->name,
+                'description' => $request->description,
+            ]);
 
-        return response()->json([
-            'message' => 'Task Created Successfully',
-            'task' => $task,
-        ], 200);
+            return response()->json([
+                'message' => 'Task Edited Successfully',
+                'task' => $task,
+            ], 200);
+        }
+
+        return response()->json(["message" => "Not Authorized!"], 403);
 
     }
 
@@ -110,14 +118,21 @@ class TaskController extends Controller
      *
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Http\Response
+     *
+     * Protected by a TaskPolicy@deleteOrUpdate
+     *
      */
     public function destroy(Task $task)
     {
-        $task->delete();
+        if (auth()->user()->can("deleteOrUpdate", $task)) {
+            $task->delete();
 
-        return response()->json([
-            'message' => 'Task Deleted Successfully',
-            'task' => $task,
-        ], 200);
+            return response()->json([
+                'message' => 'Task Deleted Successfully',
+                'task' => $task,
+            ], 200);
+        }
+
+        return response()->json(["message" => "Not Authorized!"], 403);
     }
 }
