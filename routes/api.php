@@ -35,7 +35,7 @@ Route::group([
         'namespace' => 'App\Http\Controllers',
         'prefix' => 'team',
     ], function () {
-        Route::get("/userTeam", "TeamController@getUserTeam"); // Auth Protected
+        Route::get("/user/team", "TeamController@getUserTeam"); // Auth Protected
         Route::get("/show/{team}", "TeamController@getTeam"); // Policy Protected Route -- TeamPolicy
 
         Route::middleware(['auth.role:Admin,Manager'])->group(function () {
