@@ -25,7 +25,6 @@ class TaskFactory extends Factory
             'name' => $this->faker->name(),
             'description' => $this->faker->text(100),
             'created_by' => 1,
-            "completed" => $this->faker->boolean(),
         ];
     }
 }

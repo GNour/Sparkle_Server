@@ -60,7 +60,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->BelongsToMany(Task::class, "user_tasks", "task_id", "user_id", "id")
             ->as("tasks")
-            ->withPivot("deadline")
+            ->withPivot("deadline", 'completed')
             ->withTimestamps();
     }
 

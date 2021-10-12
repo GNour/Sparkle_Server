@@ -16,7 +16,7 @@ class CreateUserTasksTable extends Migration
         Schema::create('user_tasks', function (Blueprint $table) {
             $table->foreignId("user_id")->constrained("users");
             $table->foreignId("task_id")->constrained("tasks");
-            $table->boolean("completed");
+            $table->boolean("completed")->default(0);
             $table->timestamp("deadline");
             $table->timestamps();
             $table->softDeletes();
