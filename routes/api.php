@@ -35,7 +35,7 @@ Route::group([
         'namespace' => 'App\Http\Controllers',
         'prefix' => 'team',
     ], function () {
-        Route::get("/userTeam", "TeamController@getUserTeam");
+        Route::get("/userTeam", "TeamController@getUserTeam"); // Auth Protected
         Route::get("/show/{team}", "TeamController@getTeam"); // Policy Protected Route -- TeamPolicy
 
         Route::middleware(['auth.role:Admin,Manager'])->group(function () {
@@ -59,6 +59,16 @@ Route::group([
             Route::get("/allWithTeam", "UserController@getUsersWithTeam");
             Route::delete("/delete/{user}", "UserController@destroy");
         });
+    });
+
+    Route::group([
+        'namespace' => 'App\Http\Controllers\Task',
+        'prefix' => 'task',
+        'middleware' => 'auth.role:Admin,Manager,Leader',
+    ], function () {
+        Route::post("/create", "TaskController@store");
+        Route::put("/edit/{task}", "TaskController@update");
+        Route::delete("/delete/{task}", "TaskController@destroy");
     });
 
     Route::group([
