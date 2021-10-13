@@ -64,13 +64,25 @@ Route::group([
     Route::group([
         'namespace' => 'App\Http\Controllers\Task',
         'prefix' => 'task',
-        'middleware' => 'auth.role:Admin,Manager,Leader',
+        'middleware' => 'auth',
     ], function () {
-        Route::post("/create", "TaskController@store");
-        Route::put("/edit/{task}", "TaskController@update"); // Policy Protected Route -- TaskPolicy@deleteOrUpdate
-        Route::delete("/delete/{task}", "TaskController@destroy"); // Policy Protected Route -- TaskPolicy@deleteOrUpdate
-        Route::put("/assign/{task}", "TaskController@assignTask");
-        Route::put("/unassign/{task}", "TaskController@unassignTask");
+
+        Route::get("/assigned", "TaskController@getAssignedTasks"); // Controller Protected
+        Route::put("/complete/{task}", "TaskController@completeTask");
+
+        Route::middleware(['auth.role:Admin,Manager,Leader'])->group(function () {
+            Route::post("/create", "TaskController@store");
+            Route::put("/edit/{task}", "TaskController@update"); // Policy Protected Route -- TaskPolicy@deleteOrUpdate
+            Route::delete("/delete/{task}", "TaskController@destroy"); // Policy Protected Route -- TaskPolicy@deleteOrUpdate
+            Route::put("/assign/{task}", "TaskController@assignTask");
+            Route::put("/unassign/{task}", "TaskController@unassignTask");
+            Route::get("/unassigned", "TaskController@getUnassignedTasks");
+            Route::get("/unfinished", "TaskController@getUnfinishedTasks");
+        });
+
+        Route::middleware(['auth.role:Admin,Manager'])->group(function () {
+            Route::get("/all", "TaskController@getAllTasks");
+        });
     });
 
     Route::group([

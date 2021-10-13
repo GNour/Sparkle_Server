@@ -13,6 +13,83 @@ use Illuminate\Support\Facades\Validator;
 
 class TaskController extends Controller
 {
+
+    /**
+     * Fetch all tasks.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllTasks()
+    {
+        return response()->json(Task::all()->toArray());
+    }
+
+    /**
+     * Fetch unassigned tasks.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getUnassignedTasks()
+    {
+        return response()->json(Task::doesntHave('users')->get());
+    }
+
+    /**
+     * Fetch unfinished tasks with users that completed and not completed the task.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getUnfinishedTasks()
+    {
+        return response()->json(Task::whereRelation('users', 'completed', 0)->with('users:id,username,profile_picture,team_id')->get());
+    }
+
+    /**
+     * Fetch finished tasks.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getFinishedTasks()
+    {
+        return response()->json(Task::whereRelation('users', 'completed', 0)->with('users:id,username,profile_picture,team_id')->get());
+    }
+
+    /**
+     * Fetch assigned tasks.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAssignedTasks()
+    {
+        if (auth()->user()->role == "Staff") {
+            return response()->json(auth()->user()->tasks->wherePivot("complete", 0));
+        }
+        return response()->json(Task::whereRelation('users', 'completed', 0)->with('users:id,username,profile_picture,team_id')->get());
+    }
+
+    /**
+     * Change completed from 0 to 1 after user finish a task.
+     *
+     * @param  \App\Models\Task  $task
+     * @return \Illuminate\Http\Response
+     */
+    public function completeTask(Task $task)
+    {
+        $completed = $task->users()->updateExistingPivot(auth()->user()->id, ["completed" => 1]);
+
+        if ($completed) {
+            return response()->json([
+                "message" => "Task completed",
+                "task" => $task,
+            ], 200);
+        } else {
+            return response()->json([
+                "message" => "Task couldn't be completed",
+                "task" => $task,
+            ], 200);
+        }
+    }
+
     /**
      * Assign a task to users or/and teams.
      *
@@ -48,8 +125,8 @@ class TaskController extends Controller
             ], 406);
         }
 
-        $task->users()->attach($users);
-        $task->users()->attach($teams);
+        $task->users()->attach($users, ["deadline" => $request->deadline]);
+        $task->users()->attach($teams, ["deadline" => $request->deadline]);
 
         return response()->json([
             "message" => "Assigned Task successfully",
