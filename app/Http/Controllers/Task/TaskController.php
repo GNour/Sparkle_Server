@@ -15,6 +15,35 @@ class TaskController extends Controller
 {
 
     /**
+     * Display the specified resource for the user logged in to start the task.
+     *
+     * @param  \App\Models\Task  $task
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Task $task)
+    {
+        // If user is staff, only his assigned task details will be returned
+        if (auth()->user()->role == "Staff") {
+            return response()->json([
+                "task" => $task->users()
+                    ->wherePivot("task_id", $task->id)
+                    ->wherePivot("user_id", auth()->user()->id)
+                    ->get(["id"]),
+                "taskable" => $task->taskable()->get(),
+            ]);
+        }
+
+        // Else all users assigned tasks will be returned
+        return response()->json([
+            "task" => $task->users()
+                ->wherePivot("task_id", $task->id)
+                ->get(["id"]),
+            "taskable" => $task->taskable()->get(),
+        ]);
+
+    }
+
+    /**
      * Fetch all tasks.
      *
      * @return \Illuminate\Http\Response

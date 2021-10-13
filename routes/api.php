@@ -67,6 +67,7 @@ Route::group([
         'middleware' => 'auth',
     ], function () {
 
+        Route::get("/show/{task}", "TaskController@show");
         Route::get("/assigned", "TaskController@getAssignedTasks"); // Controller Protected
         Route::put("/complete/{task}", "TaskController@completeTask");
 
