@@ -110,6 +110,8 @@ Route::group([
     ], function () {
 
         Route::get("show/{course}", "CourseController@show");
+        Route::put("take/{course}", "CourseController@takeCourse");
+        Route::put("complete/{course}", "CourseController@completeCourse");
 
         Route::prefix('video')->group(function () {
             Route::put('watch/{video}', "VideoController@watchVideo");
