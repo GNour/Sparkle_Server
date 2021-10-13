@@ -21,4 +21,12 @@ class Article extends Model
     {
         return $this->belongsTo(Course::class, "course_id");
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, "users_read_articles")
+            ->as("details")
+            ->withPivot("completed")
+            ->withTimestamps();
+    }
 }

@@ -37,4 +37,12 @@ class Course extends Model
     {
         return $this->morphMany(Task::class, "taskable");
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, "users_take_courses")
+            ->as("details")
+            ->withPivot("grade", "completed")
+            ->withTimestamps();
+    }
 }

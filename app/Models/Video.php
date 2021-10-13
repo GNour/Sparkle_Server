@@ -21,4 +21,12 @@ class Video extends Model
     {
         return $this->belongsTo(Course::class, "course_id");
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, "users_watch_videos")
+            ->as("details")
+            ->withPivot("left_at", "completed")
+            ->withTimestamps();
+    }
 }
