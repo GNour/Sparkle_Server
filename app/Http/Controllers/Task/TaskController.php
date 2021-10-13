@@ -33,14 +33,6 @@ class TaskController extends Controller
             ]);
         }
 
-        // Else all users assigned tasks will be returned
-        return response()->json([
-            "task" => $task->users()
-                ->wherePivot("task_id", $task->id)
-                ->get(["id"]),
-            "taskable" => $task->taskable()->get(),
-        ]);
-
     }
 
     /**
@@ -55,43 +47,59 @@ class TaskController extends Controller
 
     /**
      * Fetch unassigned tasks.
-     *
+     * Leader can fetch unassigned tasks created by him, Admin/Manager can fetch all
      * @return \Illuminate\Http\Response
      */
     public function getUnassignedTasks()
     {
+        if (auth()->user()->role == "Leader") {
+            return Task::where('created_by', auth()->user()->id)->doesntHave('users')->get();
+        }
         return response()->json(Task::doesntHave('users')->get());
     }
 
     /**
-     * Fetch unfinished tasks with users that completed and not completed the task.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function getUnfinishedTasks()
-    {
-        return response()->json(Task::whereRelation('users', 'completed', 0)->with('users:id,username,profile_picture,team_id')->get());
-    }
-
-    /**
      * Fetch finished tasks.
-     *
+     * Staff fetch his finished tasks
+     * Leader fetch assigned finished tasks created by him and his finished tasks
+     * Admin/Manager fetch all finished tasks
      * @return \Illuminate\Http\Response
      */
     public function getFinishedTasks()
     {
-        return response()->json(Task::whereRelation('users', 'completed', 0)->with('users:id,username,profile_picture,team_id')->get());
+        if (auth()->user()->role == "Staff") {
+            return response()->json(auth()->user()->tasks()->wherePivot("completed", 1)->get());
+        } else if (auth()->user()->role == "Leader") {
+            return response()->json([
+                "team" => Task::where("created_by", auth()->user()->id)
+                    ->whereRelation('users', 'completed', 1)
+                    ->with('users:id,username,profile_picture,team_id')
+                    ->get(),
+                "user" => auth()->user()->tasks()->wherePivot("completed", 1)->get(),
+            ]);
+        }
+        return response()->json(Task::whereRelation('users', 'completed', 1)->with('users:id,username,profile_picture,team_id')->get());
     }
 
     /**
      * Fetch assigned tasks.
-     *
+     * Staff fetch his tasks
+     * Leader fetch assigned tasks created by him and his tasks
+     * Admin/Manager fetch all
      * @return \Illuminate\Http\Response
      */
     public function getAssignedTasks()
     {
         if (auth()->user()->role == "Staff") {
-            return response()->json(auth()->user()->tasks->wherePivot("complete", 0));
+            return response()->json(auth()->user()->tasks()->wherePivot("completed", 0)->get());
+        } else if (auth()->user()->role == "Leader") {
+            return response()->json([
+                "team" => Task::where("created_by", auth()->user()->id)
+                    ->whereRelation('users', 'completed', 0)
+                    ->with('users:id,username,profile_picture,team_id')
+                    ->get(),
+                "user" => auth()->user()->tasks()->wherePivot("completed", 0)->get(),
+            ]);
         }
         return response()->json(Task::whereRelation('users', 'completed', 0)->with('users:id,username,profile_picture,team_id')->get());
     }

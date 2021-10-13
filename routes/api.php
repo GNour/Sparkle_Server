@@ -70,6 +70,7 @@ Route::group([
         Route::get("/show/{task}", "TaskController@show");
         Route::get("/assigned", "TaskController@getAssignedTasks"); // Controller Protected
         Route::put("/complete/{task}", "TaskController@completeTask");
+        Route::get("/finished", "TaskController@getFinishedTasks");
 
         Route::middleware(['auth.role:Admin,Manager,Leader'])->group(function () {
             Route::post("/create", "TaskController@store");
@@ -78,7 +79,6 @@ Route::group([
             Route::put("/assign/{task}", "TaskController@assignTask");
             Route::put("/unassign/{task}", "TaskController@unassignTask");
             Route::get("/unassigned", "TaskController@getUnassignedTasks");
-            Route::get("/unfinished", "TaskController@getUnfinishedTasks");
         });
 
         Route::middleware(['auth.role:Admin,Manager'])->group(function () {
