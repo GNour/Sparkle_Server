@@ -24,7 +24,10 @@ class Task extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, "user_tasks")->withPivot("deadline", "completed")->withTimestamps();
+        return $this->belongsToMany(User::class, "user_tasks")
+            ->as("details")
+            ->withPivot("deadline", "completed")
+            ->withTimestamps();
     }
 
 }
