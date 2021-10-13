@@ -92,6 +92,9 @@ Route::group([
         'prefix' => 'todo',
         'middleware' => 'auth',
     ], function () {
+
+        Route::get("show/{todo}", "TodoController@show");
+
         Route::middleware(['auth.role:Admin,Manager,Leader'])->group(function () {
             Route::post("/create", "TodoController@store");
             Route::put("/edit/{todo}", "TodoController@update"); // Policy Protected Route -- TodoPolicy@deleteOrUpdate

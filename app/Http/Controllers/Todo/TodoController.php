@@ -11,6 +11,17 @@ class TodoController extends Controller
 {
 
     /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Todo  $todo
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Todo $todo)
+    {
+        return response()->json($todo);
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
