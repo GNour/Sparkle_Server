@@ -11,6 +11,50 @@ class QuizController extends Controller
 {
 
     /**
+     * Store resource in user_take_quizzes
+     *
+     * @param  \App\Models\Quiz  $quiz
+     * @return \Illuminate\Http\Response
+     */
+    public function takeQuiz(Quiz $quiz)
+    {
+
+        $alreadyWatched = auth()->user()->quizzes()->where('quiz_id', $quiz->id)->get();
+        // Checks if quiz is already taken before, else add it to take quizzes
+        if (!$alreadyWatched->isEmpty()) {
+            return $alreadyWatched;
+        } else {
+            auth()->user()->quizzes()->attach($quiz, ["grade" => 0]);
+        }
+
+        return response()->json([
+            "message" => "Added to take quizzes",
+        ]);
+    }
+
+    /**
+     * Update completed in user_take_quizzes to 1
+     *
+     * @param  \App\Models\Quiz  $quiz
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function completeQuiz(Request $request, Quiz $quiz)
+    {
+
+        if (auth()->user()->quizzes()->updateExistingPivot($quiz->id, ["completed" => 1, "grade" => $request->grade])) {
+            return response()->json([
+                "message" => "Marked quiz as completed and assigned grade " . $request->grade,
+            ]);
+        }
+
+        return response()->json([
+            "message" => "Couldn't mark quiz as completed",
+        ], 400);
+
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
