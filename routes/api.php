@@ -86,9 +86,11 @@ Route::group([
         });
     });
 
+    // TODO RELATED ROUTES
     Route::group([
         'namespace' => 'App\Http\Controllers\Todo',
         'prefix' => 'todo',
+        'middleware' => 'auth',
     ], function () {
         Route::middleware(['auth.role:Admin,Manager,Leader'])->group(function () {
             Route::post("/create", "TodoController@store");
@@ -97,10 +99,15 @@ Route::group([
         });
     });
 
+    // COURSE RELATED ROUTES
     Route::group([
         'namespace' => 'App\Http\Controllers\Course',
         'prefix' => 'course',
+        'middleware' => 'auth',
     ], function () {
+
+        Route::get("show/{course}", "CourseController@show");
+
         Route::middleware(['auth.role:Admin,Manager,Leader'])->group(function () {
             Route::post("/create", "CourseController@store");
             Route::put("/edit/{course}", "CourseController@update"); // Policy Protected Route -- CoursePolicy@deleteOrUpdate

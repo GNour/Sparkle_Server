@@ -43,7 +43,12 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
-        //
+        return response()->json([
+            "course" => $course,
+            "videos" => $course->videos()->get(),
+            "articles" => $course->articles()->get(),
+            "quizzes" => $course->quizzes()->get(),
+        ]);
     }
 
     /**
