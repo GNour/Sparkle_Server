@@ -17,7 +17,7 @@ class CreateUserTasksTable extends Migration
             $table->foreignId("user_id")->constrained("users");
             $table->foreignId("task_id")->constrained("tasks");
             $table->boolean("completed")->default(0);
-            $table->timestamp("deadline");
+            $table->dateTime("deadline");
             $table->timestamps();
             $table->softDeletes();
         });
