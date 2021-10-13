@@ -11,6 +11,76 @@ class VideoController extends Controller
 {
 
     /**
+     * Store resource in user_watch_videos
+     *
+     * @param  \App\Models\Video  $video
+     * @return \Illuminate\Http\Response
+     */
+    public function watchVideo(Video $video)
+    {
+
+        $alreadyWatched = auth()->user()->videos()->where('video_id', $video->id)->get();
+        // Checks if video is already watched before, else added it to watched videos
+        if (!$alreadyWatched->isEmpty()) {
+            return $alreadyWatched;
+        } else {
+            auth()->user()->videos()->attach($video, ["left_at" => null]);
+        }
+
+        return response()->json([
+            "message" => "Added to watched videos",
+        ]);
+    }
+
+    /**
+     * Update completed in user_watch_videos to 1
+     *
+     * @param  \App\Models\Video  $video
+     * @return \Illuminate\Http\Response
+     */
+    public function completeVideo(Video $video)
+    {
+
+        if (auth()->user()->videos()->updateExistingPivot($video->id, ["completed" => 1])) {
+            return response()->json([
+                "message" => "Marked video as completed",
+            ]);
+        }
+
+        return response()->json([
+            "message" => "Couldn't mark video as completed",
+        ], 400);
+
+    }
+
+    /**
+     * Update left at timestamp on user video.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Video  $video
+     * @return \Illuminate\Http\Response
+     */
+    public function editVideoLeftAt(Request $request, Video $video)
+    {
+        $validator = Validator::make($request->all(), [
+            'leftAt' => 'required|date_format:H:m:s',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors()->toJson(), 400);
+        }
+
+        if (auth()->user()->videos()->updateExistingPivot($video->id, ["left_at" => $request->leftAt])) {
+            return response()->json([
+                "message" => "Video left at " . $request->leftAt,
+            ]);
+        }
+
+        return response()->json([
+            "message" => "Couldn't modify left at to video",
+        ], 400);
+    }
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
