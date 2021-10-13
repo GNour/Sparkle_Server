@@ -117,6 +117,11 @@ Route::group([
             Route::put('complete/{video}', "VideoController@completeVideo");
         });
 
+        Route::prefix('article')->group(function () {
+            Route::put('read/{article}', "ArticleController@readArticle");
+            Route::put('complete/{article}', "ArticleController@completeArticle");
+        });
+
         Route::middleware(['auth.role:Admin,Manager,Leader'])->group(function () {
             Route::post("/create", "CourseController@store");
             Route::put("/edit/{course}", "CourseController@update"); // Policy Protected Route -- CoursePolicy@deleteOrUpdate

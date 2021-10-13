@@ -11,6 +11,49 @@ class ArticleController extends Controller
 {
 
     /**
+     * Store resource in user_read_articles
+     *
+     * @param  \App\Models\Article  $article
+     * @return \Illuminate\Http\Response
+     */
+    public function readArticle(Article $article)
+    {
+
+        $alreadyWatched = auth()->user()->articles()->where('article_id', $article->id)->get();
+        // Checks if article is already read before, else add it to read articles
+        if (!$alreadyWatched->isEmpty()) {
+            return $alreadyWatched;
+        } else {
+            auth()->user()->articles()->attach($article);
+        }
+
+        return response()->json([
+            "message" => "Added to read articles",
+        ]);
+    }
+
+    /**
+     * Update completed user_read_articles to 1
+     *
+     * @param  \App\Models\Article  $article
+     * @return \Illuminate\Http\Response
+     */
+    public function completeArticle(Article $article)
+    {
+
+        if (auth()->user()->articles()->updateExistingPivot($article->id, ["completed" => 1])) {
+            return response()->json([
+                "message" => "Marked article as completed",
+            ]);
+        }
+
+        return response()->json([
+            "message" => "Couldn't mark article as completed",
+        ], 400);
+
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
