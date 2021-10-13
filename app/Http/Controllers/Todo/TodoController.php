@@ -12,12 +12,24 @@ class TodoController extends Controller
 
     /**
      * Display the specified resource.
-     *
+     * User fetch todo if he have it as a task, Others fetch any
      * @param  \App\Models\Todo  $todo
      * @return \Illuminate\Http\Response
      */
     public function show(Todo $todo)
     {
+        if (auth()->user()->role == "Staff") {
+            $isTodoInUserTasks = in_array($todo->id, auth()->user()->tasks()
+                    ->wherePivotIn("task_id", $todo->tasks()->pluck("id"))
+                    ->pluck("taskable_id")
+                    ->toArray());
+
+            if (!$isTodoInUserTasks) {
+                return response()->json([
+                    "message" => "You are not allowed to view this todo",
+                ]);
+            }
+        }
         return response()->json($todo);
     }
 
