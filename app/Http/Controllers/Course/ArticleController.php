@@ -29,6 +29,7 @@ class ArticleController extends Controller
 
         return response()->json([
             "message" => "Added to read articles",
+            "article" => $article,
         ]);
     }
 

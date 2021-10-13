@@ -29,6 +29,7 @@ class VideoController extends Controller
 
         return response()->json([
             "message" => "Added to watched videos",
+            "video" => $video,
         ]);
     }
 

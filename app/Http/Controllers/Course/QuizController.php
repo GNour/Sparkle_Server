@@ -29,6 +29,7 @@ class QuizController extends Controller
 
         return response()->json([
             "message" => "Added to take quizzes",
+            "quiz" => $quiz->with(["questions"])->get(),
         ]);
     }
 
@@ -80,17 +81,6 @@ class QuizController extends Controller
             'message' => 'Quiz Created Successfully',
             'quiz' => $quiz,
         ], 201);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Quiz  $quiz
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Quiz $quiz)
-    {
-        //
     }
 
     /**
