@@ -91,12 +91,26 @@ class CourseController extends Controller
 
     /**
      * Display the specified resource.
-     *
+     * User fetch course if he have it as a task, Others fetch any
      * @param  \App\Models\Course  $course
      * @return \Illuminate\Http\Response
      */
     public function show(Course $course)
     {
+
+        if (auth()->user()->role == "Staff") {
+            $isCourseInUserTask = in_array($course->id, auth()->user()->tasks()
+                    ->wherePivotIn("task_id", $course->tasks()->pluck("id"))
+                    ->pluck("taskable_id")
+                    ->toArray());
+
+            if (!$isCourseInUserTask) {
+                return response()->json([
+                    "message" => "You are not allowed to view this course",
+                ]);
+            }
+
+        }
         return response()->json([
             "course" => $course,
             "videos" => $course->videos()->get(),
