@@ -95,13 +95,12 @@ class TaskController extends Controller
         } else if (auth()->user()->role == "Leader") {
             return response()->json([
                 "team" => Task::where("created_by", auth()->user()->id)
-                    ->whereRelation('users', 'completed', 0)
-                    ->with('users:id,username,profile_picture,team_id')
+                    ->with(["users" => 'users:id,username,profile_picture,team_id', "createdBy" => "createdBy"])
                     ->get(),
                 "user" => auth()->user()->tasks()->wherePivot("completed", 0)->get(),
             ]);
         }
-        return response()->json(Task::whereRelation('users', 'completed', 0)->with('users:id,username,profile_picture,team_id')->get());
+        return response()->json(Task::has("users")->with('users:id,username,profile_picture,team_id', "createdBy:id,username")->get());
     }
 
     /**

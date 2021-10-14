@@ -30,4 +30,9 @@ class Task extends Model
             ->withTimestamps();
     }
 
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, "created_by", "id");
+    }
+
 }
