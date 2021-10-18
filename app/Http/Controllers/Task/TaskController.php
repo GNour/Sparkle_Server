@@ -53,9 +53,9 @@ class TaskController extends Controller
     public function getUnassignedTasks()
     {
         if (auth()->user()->role == "Leader") {
-            return Task::where('created_by', auth()->user()->id)->doesntHave('users')->get();
+            return Task::where('created_by', auth()->user()->id)->with("createdBy:id,username")->doesntHave('users')->get();
         }
-        return response()->json(Task::doesntHave('users')->get());
+        return response()->json(Task::with("createdBy:id,username")->doesntHave('users')->get());
     }
 
     /**
