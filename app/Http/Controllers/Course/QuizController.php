@@ -19,17 +19,17 @@ class QuizController extends Controller
     public function takeQuiz(Quiz $quiz)
     {
 
-        $alreadyWatched = auth()->user()->quizzes()->where('quiz_id', $quiz->id)->get();
+        $alreadyTaken = auth()->user()->quizzes()->where('quiz_id', $quiz->id)->get();
         // Checks if quiz is already taken before, else add it to take quizzes
-        if (!$alreadyWatched->isEmpty()) {
-            return $alreadyWatched;
+        if (!$alreadyTaken->isEmpty()) {
+            return $alreadyTaken;
         } else {
             auth()->user()->quizzes()->attach($quiz, ["grade" => 0]);
         }
 
         return response()->json([
             "message" => "Added to take quizzes",
-            "quiz" => $quiz->with(["questions"])->get(),
+            "quiz" => $quiz->load(["questions"]),
         ]);
     }
 
