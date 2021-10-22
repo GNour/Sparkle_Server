@@ -59,6 +59,15 @@ Route::group([
             Route::get("/allWithTeam", "UserController@getUsersWithTeam");
             Route::delete("/delete/{user}", "UserController@destroy");
         });
+
+        // NOTE ROUTES, ADDED AFTER V1.0
+        Route::group([
+            'prefix' => 'note',
+            'middleware' => 'auth.role:Admin,Manager,Leader',
+        ], function () {
+            Route::post("add", "NoteController@store");
+            Route::delete("delete/{note}", "NoteController@destroy");
+        });
     });
 
     Route::group([

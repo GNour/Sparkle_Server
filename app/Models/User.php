@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Article;
+use App\Models\Note;
 use App\Models\Task;
 use App\Models\Team;
 use App\Models\Video;
@@ -88,6 +89,11 @@ class User extends Authenticatable implements JWTSubject
             ->as("userCourse")
             ->withPivot('completed', 'grade')
             ->withTimestamps();
+    }
+
+    public function notes()
+    {
+        return $this->hasMany(Note::class);
     }
 
     public function quizzes()

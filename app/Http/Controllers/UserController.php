@@ -43,7 +43,7 @@ class UserController extends Controller
     public function show(User $user)
     {
         if (auth()->user()->can('view', $user)) {
-            return response()->json($user->load(["team"]));
+            return response()->json($user->load(["team", "tasks", "courses", "notes"]));
         }
         return response()->json(["message" => "Not Authorized!"], 403);
     }
