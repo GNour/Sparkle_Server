@@ -29,4 +29,13 @@ class Article extends Model
             ->withPivot("completed")
             ->withTimestamps();
     }
+
+    public function user()
+    {
+        return $this->belongsToMany(User::class, "users_read_articles")
+            ->as("details")
+            ->wherePivot("user_id", auth()->user()->id)
+            ->withPivot("completed")
+            ->withTimestamps();
+    }
 }

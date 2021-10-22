@@ -113,9 +113,9 @@ class CourseController extends Controller
         }
         return response()->json([
             "course" => $course,
-            "videos" => $course->videos()->get(),
-            "articles" => $course->articles()->get(),
-            "quizzes" => $course->quizzes()->get(),
+            "videos" => $course->videos()->with("user")->get(),
+            "articles" => $course->articles()->with("user")->get(),
+            "quizzes" => $course->quizzes()->with("user")->get(),
         ]);
     }
 

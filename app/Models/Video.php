@@ -29,4 +29,12 @@ class Video extends Model
             ->withPivot("left_at", "completed")
             ->withTimestamps();
     }
+    public function user()
+    {
+        return $this->belongsToMany(User::class, "users_watch_videos")
+            ->as("details")
+            ->wherePivot("user_id", auth()->user()->id)
+            ->withPivot("left_at", "completed")
+            ->withTimestamps();
+    }
 }

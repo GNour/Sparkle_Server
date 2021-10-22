@@ -36,4 +36,13 @@ class Quiz extends Model
             ->withPivot("grade", "completed")
             ->withTimestamps();
     }
+
+    public function user()
+    {
+        return $this->belongsToMany(User::class, "users_take_quizzes")
+            ->as("details")
+            ->wherePivot("user_id", auth()->user()->id)
+            ->withPivot("grade", "completed")
+            ->withTimestamps();
+    }
 }
