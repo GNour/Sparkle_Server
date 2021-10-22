@@ -19,6 +19,7 @@ class CreateTasksTable extends Migration
             $table->text("description");
             $table->foreignId("created_by")->constrained("users");
             $table->nullableMorphs("taskable");
+            $table->tinyInteger("assigned")->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

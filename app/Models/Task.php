@@ -15,6 +15,7 @@ class Task extends Model
         'taskable_id',
         'taskable_type',
         'created_by',
+        'assigned',
     ];
 
     public function taskable()

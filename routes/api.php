@@ -79,11 +79,11 @@ Route::group([
             Route::put("/assign/{task}", "TaskController@assignTask");
             Route::put("/unassign/{task}", "TaskController@unassignTask");
             Route::get("/unassigned", "TaskController@getUnassignedTasks");
+            Route::put("/finish/{task}", "TaskController@finishTask");
+            Route::put("/uncomplete/{task}/{user}", "TaskController@uncompleteTask");
         });
 
-        Route::middleware(['auth.role:Admin,Manager'])->group(function () {
-            Route::get("/all", "TaskController@getAllTasks");
-        });
+        Route::get("/all", "TaskController@getAllTasks");
     });
 
     // TODO RELATED ROUTES

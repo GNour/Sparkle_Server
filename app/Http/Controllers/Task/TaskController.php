@@ -42,7 +42,10 @@ class TaskController extends Controller
      */
     public function getAllTasks()
     {
-        return response()->json(Task::all()->toArray());
+        if (auth()->user()->role == "Staff") {
+            return response()->json(auth()->user()->tasks()->with("createdBy:id,username")->get());
+        }
+        return response()->json(Task::with("taskable", "createdBy:id,username", "users")->get());
     }
 
     /**
@@ -127,6 +130,45 @@ class TaskController extends Controller
     }
 
     /**
+     * Change completed from 1 to 0 after admin uncomplete a staff task
+     *
+     * @param  \App\Models\Task  $task
+     * @return \Illuminate\Http\Response
+     */
+    public function uncompleteTask(Task $task, User $user)
+    {
+        $completed = $task->users()->updateExistingPivot($user->id, ["completed" => 0]);
+
+        if ($completed) {
+            return response()->json([
+                "message" => "Task uncompleted",
+                "task" => $task,
+            ], 200);
+        } else {
+            return response()->json([
+                "message" => "Task couldn't be uncompleted",
+                "task" => $task,
+            ], 200);
+        }
+    }
+
+    /**
+     * Change assigned from 1 to 2 to mark task as finished.
+     *
+     * @param  \App\Models\Task  $task
+     * @return \Illuminate\Http\Response
+     */
+    public function finishTask(Task $task)
+    {
+        if ($task->update(["assigned" => 2])) {
+            return response()->json([
+                "message" => "Task marked as finished",
+                "task" => $task,
+            ], 200);
+        }
+    }
+
+    /**
      * Assign a task to users or/and teams.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -163,6 +205,7 @@ class TaskController extends Controller
 
         $task->users()->attach($users, ["deadline" => $request->deadline]);
         $task->users()->attach($teams, ["deadline" => $request->deadline]);
+        $task->update(["assigned" => 1]);
 
         return response()->json([
             "message" => "Assigned Task successfully",
@@ -194,6 +237,7 @@ class TaskController extends Controller
 
         $task->users()->detach($users);
         $task->users()->detach($teams);
+        $task->update(["assigned" => 0]);
 
         return response()->json([
             "message" => "Unassigned Task successfully",
