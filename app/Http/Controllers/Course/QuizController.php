@@ -29,7 +29,7 @@ class QuizController extends Controller
 
         return response()->json([
             "message" => "Added to take quizzes",
-            "quiz" => $quiz->load(["questions"]),
+            "quiz" => $quiz->load(["questions", "questions.answers"]),
         ]);
     }
 

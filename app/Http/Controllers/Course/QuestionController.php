@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Course;
 
 use App\Http\Controllers\Controller;
 use App\Models\Question;
+use App\Models\Quiz;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,20 +17,18 @@ class QuestionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Quiz $quiz)
     {
         $validator = Validator::make($request->all(), [
             'weight' => 'required',
             'question' => 'required|string',
-            'quiz_id' => 'required',
-            'answer' => 'required|string',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors()->toJson(), 400);
         }
 
-        $question = Question::create($validator->validated());
+        $question = Question::create(array_merge($validator->validated(), ["quiz_id" => $quiz->id]));
 
         return response()->json([
             'message' => 'Question Created Successfully',
