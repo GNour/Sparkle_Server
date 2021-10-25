@@ -170,9 +170,16 @@ Route::group([
                 Route::group([
                     'prefix' => 'question',
                 ], function () {
-                    Route::post("/create", "QuestionController@store");
+                    Route::put("/create/{quiz}", "QuestionController@store");
                     Route::put("/edit/{question}", "QuestionController@update");
                     Route::delete("/delete/{question}", "QuestionController@destroy");
+
+                    Route::group([
+                        'prefix' => 'answer',
+                    ], function () {
+                        Route::put("/create/{question}", "AnswerController@store");
+                        Route::delete("/delete/{answer}", "AnswerController@destroy");
+                    });
                 });
             });
 
