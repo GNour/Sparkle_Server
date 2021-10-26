@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('profile_picture');
             $table->boolean('gender');
             $table->enum('role', ["Admin", "Manager", "Leader", "Staff"]);
+            $table->string('position')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
