@@ -18,8 +18,6 @@ class CreateQuestionsTable extends Migration
             $table->text("question");
             $table->integer("weight");
             $table->foreignId("quiz_id")->constrained("quizzes")->onDelete("cascade");
-            $table->timestamps();
-            $table->softDeletes();
         });
     }
 

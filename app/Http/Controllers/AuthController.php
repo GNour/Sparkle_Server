@@ -88,4 +88,11 @@ class AuthController extends Controller
             'user' => auth()->user(),
         ]);
     }
+
+    public function checkUser()
+    {
+        return response()->json([
+            'user' => auth()->user(),
+        ]);
+    }
 }
