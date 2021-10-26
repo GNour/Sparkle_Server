@@ -38,7 +38,6 @@ class AuthController extends Controller
             'phone_number' => 'required|between:7,15',
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required|string|confirmed|min:6',
-            'profile_picture' => 'nullable',
             'role' => 'required',
         ]);
 
@@ -46,15 +45,25 @@ class AuthController extends Controller
             return response()->json($validator->errors()->toJson(), 400);
         }
 
-        $user = User::create(array_merge(
-            $validator->validated(),
-            ['password' => bcrypt($request->password)]
-        ));
+        if ($request->hasFile('profile_picture')) {
 
-        return response()->json([
-            'message' => 'User successfully registered',
-            'user' => $user,
-        ], 201);
+            $pic = $request->file('profile_picture');
+            $name = $request->title . "_" . date('YmdHis') . "." . $pic->getClientOriginalExtension();
+            $destinationPath = public_path('/images');
+            $pic->move($destinationPath, $name);
+
+            $user = User::create(array_merge(
+                $validator->validated(),
+                ['profile_picture' => $name],
+                ['password' => bcrypt($request->password)]
+            ));
+
+            return response()->json([
+                'message' => 'User successfully registered',
+                'user' => $user,
+            ], 201);
+        }
+
     }
 
     public function logout()
