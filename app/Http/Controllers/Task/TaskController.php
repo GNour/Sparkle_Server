@@ -43,9 +43,9 @@ class TaskController extends Controller
     public function getAllTasks()
     {
         if (auth()->user()->role == "Staff") {
-            return response()->json(auth()->user()->tasks()->with("createdBy:id,username")->get());
+            return response()->json(auth()->user()->tasks()->wherePivot("completed", 0)->with("createdBy:id,username")->get()->groupBy('taskable_type'));
         }
-        return response()->json(Task::with("taskable", "createdBy:id,username", "users")->get());
+        return response()->json(Task::with("taskable", "createdBy:id,username", "users")->get()->groupBy('assigned'));
     }
 
     /**
