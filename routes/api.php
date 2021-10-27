@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Course\CourseController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -8,9 +9,7 @@ use Illuminate\Support\Facades\Route;
 | API Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
+| Each route have different protection...
 |
  */
 
@@ -187,4 +186,12 @@ Route::group([
         });
     });
 
+});
+
+// SERVER SIDE RENDERING ROUTES --- KEY REQUIRED ---
+
+Route::group([
+    'prefix' => 'server',
+], function () {
+    Route::post("/courses", [CourseController::class, "getCoursesForTask"]);
 });

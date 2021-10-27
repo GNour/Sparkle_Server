@@ -167,4 +167,20 @@ class CourseController extends Controller
 
         return response()->json(["message" => "Not Authorized!"], 403);
     }
+
+    /**
+     * Fetch Courses to assign to tasks.
+     * Public Route protected with a key
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getCoursesForTask(Request $request)
+    {
+        if (env("PUBLIC_KEY") == $request->key) {
+            return response()->json(
+                Course::get(["id", "name"])
+            );
+        }
+    }
 }
