@@ -18,7 +18,6 @@ class Question extends Model
         'answer',
         'weight',
         'quiz_id',
-        'answer_id',
     ];
 
     public function quiz()

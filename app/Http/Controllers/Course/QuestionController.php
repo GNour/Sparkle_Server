@@ -22,6 +22,7 @@ class QuestionController extends Controller
         $validator = Validator::make($request->all(), [
             'weight' => 'required',
             'question' => 'required|string',
+            'answer' => 'required|string',
         ]);
 
         if ($validator->fails()) {

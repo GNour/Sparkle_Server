@@ -25,6 +25,7 @@ class QuestionFactory extends Factory
             "question" => $this->faker->text(50),
             "weight" => $this->faker->numberBetween(0, 100),
             "question" => $this->faker->text(50),
+            "answer" => $this->faker->text(20),
         ];
     }
 }
