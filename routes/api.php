@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Course\CourseController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,8 +29,18 @@ Route::group([
 });
 
 Route::group([
+    'namespace' => 'App\Http\Controllers',
     'middleware' => 'auth:api',
 ], function () {
+
+    // Realtime chat app for presentation
+    Route::group([
+        'prefix' => 'message',
+    ], function () {
+        Route::post("/send", "ChatController@sendMessage");
+        Route::get("/messages", "ChatController@getMessages");
+        Route::put("/read/{user}", "ChatController@readMessages");
+    });
 
     Route::group([
         'namespace' => 'App\Http\Controllers',
@@ -194,4 +205,5 @@ Route::group([
     'prefix' => 'server',
 ], function () {
     Route::post("/courses", [CourseController::class, "getCoursesForTask"]);
+    Route::post("/users", [UserController::class, "getUsersBasicInfo"]);
 });
