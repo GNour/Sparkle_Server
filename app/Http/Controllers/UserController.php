@@ -102,4 +102,20 @@ class UserController extends Controller
             'user' => $user,
         ], 201);
     }
+
+    /**
+     * Fetch Users Basic Info
+     * Public Route protected with a key
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getUsersBasicInfo(Request $request)
+    {
+        if (env("PUBLIC_KEY") == $request->key) {
+            return response()->json(
+                User::get(["id", "username"])
+            );
+        }
+    }
 }
