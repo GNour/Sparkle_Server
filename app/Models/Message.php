@@ -11,9 +11,7 @@ class Message extends Model
 
     protected $fillable = [
         'from',
-        'to',
         'message',
-        'read',
     ];
 
     public function to()

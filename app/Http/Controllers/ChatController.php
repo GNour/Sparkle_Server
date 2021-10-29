@@ -12,8 +12,8 @@ class ChatController extends Controller
 
     public function sendMessage(Request $request)
     {
-        $message = ModelsMessage::create(array_merge($request->all(), ["read" => 0]));
-        event(new Message($request->message, $request->from, $request->to));
+        $message = ModelsMessage::create(array_merge($request->all()));
+        event(new Message($request->message, $request->from));
 
         return response()->json($message);
     }
@@ -21,11 +21,7 @@ class ChatController extends Controller
     public function getMessages()
     {
         return response()->json(
-            ModelsMessage::
-                where("to", auth()->user()->id)
-                ->orWhere("from", auth()->user()->id)
-                ->get()
-                ->load(["from", "to"])
+            ModelsMessage::with(["from"])->get()
         );
     }
 
