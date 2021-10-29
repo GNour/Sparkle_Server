@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Course\CourseController;
+use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -206,4 +207,6 @@ Route::group([
 ], function () {
     Route::post("/courses", [CourseController::class, "getCoursesForTask"]);
     Route::post("/users", [UserController::class, "getUsersBasicInfo"]);
+    Route::post("/teams", [TeamController::class, "getTeamsBasicInfo"]);
+    Route::post("/managers", [UserController::class, "getManagers"]);
 });

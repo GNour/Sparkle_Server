@@ -118,4 +118,20 @@ class UserController extends Controller
             );
         }
     }
+
+    /**
+     * Fetch Users that are managers
+     * Public Route protected with a key
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getManagers(Request $request)
+    {
+        if (env("PUBLIC_KEY") == $request->key) {
+            return response()->json(
+                User::where("role", "Manager")->orWhere("role", "Admin")->get(["id", "username", "role"])
+            );
+        }
+    }
 }

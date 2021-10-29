@@ -90,4 +90,20 @@ class TeamController extends Controller
             'team' => $team,
         ], 201);
     }
+
+    /**
+     * Fetch Teams Basic Info.
+     * Public Route protected with a key
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getTeamsBasicInfo(Request $request)
+    {
+        if (env("PUBLIC_KEY") == $request->key) {
+            return response()->json(
+                Team::with(["leader:id,username", "manager:id,username"])->get()->load("members")
+            );
+        }
+    }
 }
