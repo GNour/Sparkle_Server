@@ -29,13 +29,13 @@ Route::group([
 });
 
 Route::group([
-    'namespace' => 'App\Http\Controllers',
     'middleware' => 'auth:api',
 ], function () {
 
     // Realtime chat app for presentation
     Route::group([
         'prefix' => 'message',
+        'namespace' => 'App\Http\Controllers',
     ], function () {
         Route::post("/send", "ChatController@sendMessage");
         Route::get("/messages", "ChatController@getMessages");

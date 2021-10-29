@@ -114,7 +114,7 @@ class UserController extends Controller
     {
         if (env("PUBLIC_KEY") == $request->key) {
             return response()->json(
-                User::get(["id", "username"])
+                User::get(["id", "username", "profile_picture"])
             );
         }
     }
