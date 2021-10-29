@@ -255,7 +255,7 @@ class TaskController extends Controller
             'name' => 'required|string',
             'description' => 'nullable|string',
             'taskable_type' => 'required|string',
-            'taskable_id' => 'required',
+            'taskable_id' => 'nullable',
         ]);
 
         if ($validator->fails()) {
@@ -267,7 +267,11 @@ class TaskController extends Controller
                 $taskable = Course::find($request->taskable_id);
                 break;
             case "Todo":
-                $taskable = Todo::find($request->taskable_id);
+                $taskable = Todo::create([
+                    'title' => $request->name,
+                    'description' => $request->description,
+                    'created_by' => auth()->user()->id,
+                ]);
                 break;
             default:
                 $taskable = null;
