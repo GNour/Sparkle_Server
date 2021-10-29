@@ -25,8 +25,7 @@ class ChatController extends Controller
                 where("to", auth()->user()->id)
                 ->orWhere("from", auth()->user()->id)
                 ->get()
-                ->load(["from"])
-                ->groupBy("from")
+                ->load(["from", "to"])
         );
     }
 
