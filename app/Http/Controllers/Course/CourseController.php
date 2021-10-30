@@ -179,7 +179,7 @@ class CourseController extends Controller
     {
         if (env("PUBLIC_KEY") == $request->key) {
             return response()->json(
-                Course::get(["id", "name"])
+                Course::withCount(["quizzes", "articles", "videos"])->get(["id", "name", "description"])
             );
         }
     }
