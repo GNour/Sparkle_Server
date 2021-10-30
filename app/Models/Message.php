@@ -16,11 +16,11 @@ class Message extends Model
 
     public function to()
     {
-        return $this->belongsTo(User::class, "to");
+        return $this->belongsTo(User::class, "to")->withTrashed();
     }
 
     public function from()
     {
-        return $this->belongsTo(User::class, "from");
+        return $this->belongsTo(User::class, "from")->withTrashed();
     }
 }
