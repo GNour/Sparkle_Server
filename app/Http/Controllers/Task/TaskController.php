@@ -178,8 +178,8 @@ class TaskController extends Controller
     public function assignTask(Request $request, Task $task)
     {
 
-        $usersArray = json_decode($request->users) ? json_decode($request->users) : [];
-        $teamsArray = json_decode($request->teams) ? json_decode($request->teams) : [];
+        $usersArray = $request->users ? $request->users : [];
+        $teamsArray = $request->teams ? $request->teams : [];
 
         // Confirm reciving only one array
         if ($usersArray != [] && $teamsArray != []) {
@@ -235,8 +235,8 @@ class TaskController extends Controller
         $users = $this->findUsersInverse($usersArray, $assignedTo);
         $teams = $this->findTeamsInverse($teamsArray, $assignedTo);
 
-        $task->users()->detach($users);
-        $task->users()->detach($teams);
+        $task->users()->detach(User::get());
+        $task->users()->detach(Team::get());
         $task->update(["assigned" => 0]);
 
         return response()->json([
@@ -263,10 +263,10 @@ class TaskController extends Controller
         }
 
         switch ($request->taskable_type) {
-            case "Course":
+            case "course":
                 $taskable = Course::find($request->taskable_id);
                 break;
-            case "Todo":
+            case "todo":
                 $taskable = Todo::create([
                     'title' => $request->name,
                     'description' => $request->description,
