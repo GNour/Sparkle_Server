@@ -177,7 +177,7 @@ class CourseController extends Controller
      */
     public function getCoursesForTask(Request $request)
     {
-        if (env("PUBLIC_KEY") == $request->key) {
+        if (env("PUBLIC_KEY") == $request->key || auth()->user()->role == "Admin" || auth()->user()->role == "Manager") {
             return response()->json(
                 Course::withCount(["quizzes", "articles", "videos"])->get(["id", "name", "description"])
             );

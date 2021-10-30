@@ -100,7 +100,7 @@ class TeamController extends Controller
      */
     public function getTeamsBasicInfo(Request $request)
     {
-        if (env("PUBLIC_KEY") == $request->key) {
+        if (env("PUBLIC_KEY") == $request->key || auth()->user()->role == "Admin" || auth()->user()->role == "Manager") {
             return response()->json(
                 Team::with(["leader:id,username", "manager:id,username"])->get()->load("members")
             );

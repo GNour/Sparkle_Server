@@ -112,7 +112,7 @@ class UserController extends Controller
      */
     public function getUsersBasicInfo(Request $request)
     {
-        if (env("PUBLIC_KEY") == $request->key) {
+        if (env("PUBLIC_KEY") == $request->key || auth()->user()->role == "Admin" || auth()->user()->role == "Manager") {
             return response()->json(
                 User::get(["id", "username", "profile_picture"])
             );
@@ -128,7 +128,7 @@ class UserController extends Controller
      */
     public function getManagers(Request $request)
     {
-        if (env("PUBLIC_KEY") == $request->key) {
+        if (env("PUBLIC_KEY") == $request->key || auth()->user()->role == "Admin" || auth()->user()->role == "Manager") {
             return response()->json(
                 User::where("role", "Manager")->orWhere("role", "Admin")->get(["id", "username", "role"])
             );
