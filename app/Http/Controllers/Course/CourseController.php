@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Course;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -107,15 +108,16 @@ class CourseController extends Controller
             if (!$isCourseInUserTask) {
                 return response()->json([
                     "message" => "You are not allowed to view this course",
-                ]);
+                ], 401);
             }
 
         }
         return response()->json([
             "course" => $course,
+            "user" => auth()->user()->courses()->find($course->id),
             "videos" => $course->videos()->with("user")->get(),
             "articles" => $course->articles()->with("user")->get(),
-            "quizzes" => $course->quizzes()->with("user")->get(),
+            "quizzes" => $course->quizzes()->with(["questions", "user"])->get(),
         ]);
     }
 

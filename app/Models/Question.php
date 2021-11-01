@@ -16,7 +16,6 @@ class Question extends Model
     protected $fillable = [
         'question',
         'answer',
-        'weight',
         'quiz_id',
     ];
 

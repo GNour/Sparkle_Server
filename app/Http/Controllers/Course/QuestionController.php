@@ -20,7 +20,6 @@ class QuestionController extends Controller
     public function store(Request $request, Quiz $quiz)
     {
         $validator = Validator::make($request->all(), [
-            'weight' => 'required',
             'question' => 'required|string',
             'answer' => 'required|string',
         ]);
