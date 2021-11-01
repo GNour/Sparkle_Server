@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Course\CourseController;
 use App\Http\Controllers\TeamController;
@@ -209,4 +210,14 @@ Route::group([
     Route::post("/users", [UserController::class, "getUsersBasicInfo"]);
     Route::post("/teams", [TeamController::class, "getTeamsBasicInfo"]);
     Route::post("/managers", [UserController::class, "getManagers"]);
+});
+
+// ARDUINO BOARD FIGERPRINT SCANNER --- KEY REQUIRED ---
+
+Route::group([
+    'prefix' => 'iot',
+], function () {
+    Route::post("/attendance", [AttendanceController::class, "getAllAttendance"]);
+    Route::put("/attend/{user}", [AttendanceController::class, "attendIn"]);
+    Route::put("/leave/{user}", [AttendanceController::class, "leave"]);
 });
