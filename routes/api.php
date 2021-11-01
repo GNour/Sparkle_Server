@@ -210,6 +210,7 @@ Route::group([
     Route::post("/users", [UserController::class, "getUsersBasicInfo"]);
     Route::post("/teams", [TeamController::class, "getTeamsBasicInfo"]);
     Route::post("/managers", [UserController::class, "getManagers"]);
+    Route::post("/dashboard", [UserController::class, "getGeneralStatsForManagers"]);
 });
 
 // ARDUINO BOARD FIGERPRINT SCANNER --- KEY REQUIRED ---

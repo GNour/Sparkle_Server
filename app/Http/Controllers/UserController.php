@@ -2,8 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attendance;
+use App\Models\Course;
+use App\Models\Message;
+use App\Models\Task;
+use App\Models\Team;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -132,6 +139,29 @@ class UserController extends Controller
             return response()->json(
                 User::where("role", "Manager")->orWhere("role", "Admin")->get(["id", "username", "role"])
             );
+        }
+    }
+
+    /**
+     * Fetch general stats for managers
+     * Public Route protected with a key
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getGeneralStatsForManagers(Request $request)
+    {
+        if (env("PUBLIC_KEY") == $request->key || auth()->user()->role == "Admin" || auth()->user()->role == "Manager") {
+
+            return response()->json([
+                "users" => User::count(),
+                "teams" => Team::count(),
+                "courses" => Course::count(),
+                "todos" => Task::where("taskable_type", "todo")->count(),
+                "tasks" => Task::groupBy("assigned")->select('assigned', DB::raw('count(*) as total'))->get(),
+                "messages" => Message::count(),
+                "attendance" => Attendance::whereDate("created_at", Carbon::today())->count(),
+            ]);
         }
     }
 }
