@@ -219,6 +219,6 @@ Route::group([
     'prefix' => 'iot',
 ], function () {
     Route::post("/attendance", [AttendanceController::class, "getAllAttendance"]);
-    Route::put("/attend/{user}", [AttendanceController::class, "attendIn"]);
-    Route::put("/leave/{user}", [AttendanceController::class, "leave"]);
+    Route::put("/attend/{uid}", [AttendanceController::class, "attendIn"]);
+    Route::put("/leave/{uid}", [AttendanceController::class, "leave"]);
 });

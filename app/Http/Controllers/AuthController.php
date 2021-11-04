@@ -39,6 +39,7 @@ class AuthController extends Controller
             'phone_number' => 'required|between:7,15',
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required|string|confirmed|min:6',
+            'card_uid' => 'nullable',
             'role' => 'required',
         ]);
 

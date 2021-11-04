@@ -9,34 +9,47 @@ use Illuminate\Http\Request;
 
 class AttendanceController extends Controller
 {
-    public function attendIn(Request $request, User $user)
+    public function attendIn(Request $request, $uid)
     {
         if (env("PUBLIC_KEY") != $request->key) {
             return response('', 401);
         }
 
-        $attendance = Attendance::create([
-            'user_id' => $user->id,
-            'status' => 1,
-        ]);
+        $user = User::where('card_uid', $uid)->first();
 
-        event(new Message($user->username . " just checked in", -1));
-        return response()->json(["message" => "Welcome " . $user->username]);
+        if ($user) {
+            $attendance = Attendance::create([
+                'user_id' => $user->id,
+                'status' => 1,
+            ]);
+
+            event(new Message($user->username . " just checked in", "Arduino"));
+            return response()->json(["message" => "Welcome " . $user->username]);
+        } else {
+            return response()->json(["message" => "Check card"]);
+        }
     }
 
-    public function leave(Request $request, User $user)
+    public function leave(Request $request, $uid)
     {
         if (env("PUBLIC_KEY") != $request->key) {
             return response('', 401);
         }
 
-        $attendance = Attendance::create([
-            'user_id' => $user->id,
-            'status' => 0,
-        ]);
+        $user = User::where('card_uid', $uid)->first();
 
-        event(new Message($user->username . " just checked out", -1));
-        return response()->json(["message" => "Goodbye " . $user->username]);
+        if ($user) {
+            $attendance = Attendance::create([
+                'user_id' => $user->id,
+                'status' => 0,
+            ]);
+
+            event(new Message($user->username . " just checked out", "Arduino"));
+            return response()->json(["message" => "Goodbye " . $user->username]);
+        } else {
+            return response()->json(["message" => "Check card"]);
+        }
+
     }
 
     public function getAllAttendance(Request $request)
