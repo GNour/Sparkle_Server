@@ -24,13 +24,15 @@ Route::group([
     Route::post('/register', [AuthController::class, "register"]);
     Route::get('/me', [AuthController::class, "checkUser"]);
 
-    Route::middleware(['auth:api', 'cors'])->group(function () {
+    Route::middleware(['auth:api'])->group(function () {
         Route::post('/logout', [AuthController::class, "logout"]);
         Route::post('/refresh', [AuthController::class, "refresh"]);
     });
 });
 
-Route::middleware(['auth:api', 'cors'])->group(function () {
+Route::group([
+    'middleware' => 'auth:api',
+], function () {
 
     // Realtime chat app for presentation
     Route::group([
@@ -203,7 +205,6 @@ Route::middleware(['auth:api', 'cors'])->group(function () {
 
 Route::group([
     'prefix' => 'server',
-    'middleware' => 'cors',
 ], function () {
     Route::post("/courses", [CourseController::class, "getCoursesForTask"]);
     Route::post("/users", [UserController::class, "getUsersBasicInfo"]);
