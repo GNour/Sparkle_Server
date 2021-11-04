@@ -20,7 +20,7 @@ class AttendanceController extends Controller
             'status' => 1,
         ]);
 
-        event(new Message($user->username . " just checked in", "ARDUINO<FINGERPRINT>"));
+        event(new Message($user->username . " just checked in", -1));
         return response()->json(["message" => "Welcome " . $user->username]);
     }
 
@@ -35,7 +35,7 @@ class AttendanceController extends Controller
             'status' => 0,
         ]);
 
-        event(new Message($user->username . " just checked out", "ARDUINO<FINGERPRINT>"));
+        event(new Message($user->username . " just checked out", -1));
         return response()->json(["message" => "Goodbye " . $user->username]);
     }
 
