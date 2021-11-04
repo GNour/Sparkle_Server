@@ -39,7 +39,7 @@ class AuthController extends Controller
             'phone_number' => 'required|between:7,15',
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required|string|confirmed|min:6',
-            'card_uid' => 'nullable',
+            'card_uid' => 'required',
             'role' => 'required',
         ]);
 
@@ -53,18 +53,20 @@ class AuthController extends Controller
             $name = $request->title . "_" . date('YmdHis') . "." . $pic->getClientOriginalExtension();
             $destinationPath = public_path('/images');
             $pic->move($destinationPath, $name);
-
-            $user = User::create(array_merge(
-                $validator->validated(),
-                ['profile_picture' => $name],
-                ['password' => bcrypt($request->password)]
-            ));
-
-            return response()->json([
-                'message' => 'User successfully registered',
-                'user' => $user,
-            ], 201);
+        } else {
+            $name = "default.png";
         }
+
+        $user = User::create(array_merge(
+            $validator->validated(),
+            ['profile_picture' => $name],
+            ['password' => bcrypt($request->password)]
+        ));
+
+        return response()->json([
+            'message' => 'User successfully registered',
+            'user' => $user,
+        ], 201);
 
     }
 
