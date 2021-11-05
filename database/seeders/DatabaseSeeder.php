@@ -28,10 +28,10 @@ class DatabaseSeeder extends Seeder
         $user->gender = 0;
         $user->role = "Admin";
         $user->phone_number = "+961 78844775";
-        $user->profile_picture = "imgs/gsdf/sdf.jpg";
+        $user->profile_picture = "default.png";
         $user->save();
 
-        Course::factory(10)
+        Course::factory(4)
             ->hasTasks(random_int(1, 3))
             ->hasVideos(random_int(1, 3))
             ->hasArticles(random_int(1, 3))
@@ -39,6 +39,6 @@ class DatabaseSeeder extends Seeder
             ->create();
         Todo::factory(10)->hasTasks(random_int(0, 3))->create();
 
-        Team::factory(10)->hasMembers(10)->create();
+        Team::factory(3)->hasMembers(4)->create();
     }
 }

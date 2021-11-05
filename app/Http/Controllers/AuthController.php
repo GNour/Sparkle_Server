@@ -41,6 +41,7 @@ class AuthController extends Controller
             'password' => 'required|string|confirmed|min:6',
             'card_uid' => 'required',
             'role' => 'required',
+            'team_id' => 'required',
         ]);
 
         if ($validator->fails()) {
