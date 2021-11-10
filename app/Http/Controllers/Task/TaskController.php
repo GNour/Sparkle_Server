@@ -183,6 +183,7 @@ class TaskController extends Controller
 
         // Confirm reciving only one array
         if ($usersArray != [] && $teamsArray != []) {
+            $task->update((["assigned" => 1]));
             return response()->json([
                 "message" => "You can't assign simultaneously",
             ], 403);
