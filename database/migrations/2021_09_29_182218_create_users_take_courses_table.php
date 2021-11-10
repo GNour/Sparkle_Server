@@ -14,6 +14,7 @@ class CreateUsersTakeCoursesTable extends Migration
     public function up()
     {
         Schema::create('users_take_courses', function (Blueprint $table) {
+            $table->id();
             $table->foreignId("user_id")->constrained("users");
             $table->foreignId("course_id")->constrained("courses");
             $table->boolean("completed")->default(0);

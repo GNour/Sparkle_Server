@@ -14,6 +14,7 @@ class CreateUsersReadArticlesTable extends Migration
     public function up()
     {
         Schema::create('users_read_articles', function (Blueprint $table) {
+            $table->id();
             $table->foreignId("user_id")->constrained("users");
             $table->foreignId("article_id")->constrained("articles");
             $table->boolean("completed")->default(0);

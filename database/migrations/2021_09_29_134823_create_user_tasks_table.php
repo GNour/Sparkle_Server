@@ -14,6 +14,7 @@ class CreateUserTasksTable extends Migration
     public function up()
     {
         Schema::create('user_tasks', function (Blueprint $table) {
+            $table->id();
             $table->foreignId("user_id")->constrained("users");
             $table->foreignId("task_id")->constrained("tasks");
             $table->boolean("completed")->default(0);

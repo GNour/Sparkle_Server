@@ -14,6 +14,7 @@ class CreateUsersTakeQuizzesTable extends Migration
     public function up()
     {
         Schema::create('users_take_quizzes', function (Blueprint $table) {
+            $table->id();
             $table->foreignId("user_id")->constrained("users");
             $table->foreignId("quiz_id")->constrained("quizzes");
             $table->boolean("completed")->default(0);

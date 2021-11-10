@@ -14,6 +14,7 @@ class CreateUsersWatchVideosTable extends Migration
     public function up()
     {
         Schema::create('users_watch_videos', function (Blueprint $table) {
+            $table->id();
             $table->foreignId("user_id")->constrained("users");
             $table->foreignId("video_id")->constrained("videos");
             $table->boolean("completed")->default(0);
