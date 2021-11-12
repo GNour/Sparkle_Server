@@ -70,6 +70,7 @@ Any help needed, feel free to open an issue or email me directly [ghyathnour@gma
 - attend
 - leave
 
+[RFID Card Reader](https://github.com/GNour/RFID-Card-Reader)
 
 ## External packages
 - tyson/jwt-auth - For JSON Web Token autorization
