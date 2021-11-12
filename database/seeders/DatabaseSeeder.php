@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $user->password = "$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi";
         $user->gender = 0;
         $user->role = "Manager";
+        $user->position = "Administrator";
         $user->phone_number = "+961 78844775";
         $user->profile_picture = "default.png";
         $user->save();
