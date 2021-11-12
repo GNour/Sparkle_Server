@@ -189,8 +189,7 @@ class TaskController extends Controller
             ], 403);
         }
 
-        $assignedTo = $task->users()->whereIn('id', $usersArray)->orWhereIn('team_id', $teamsArray)->pluck('id')->toArray();
-
+        $assignedTo = $task->users()->where('completed', 0)->whereIn('users.id', $usersArray)->orWhereIn('team_id', $teamsArray)->pluck('users.id')->toArray();
         /*
          * Get the users,teams that are lead by the leader logged in, OR find all if the user is a manager/admin
          * Check Below functions
@@ -230,7 +229,7 @@ class TaskController extends Controller
          * Check Below functions
          */
 
-        $assignedTo = $task->users()->whereIn('id', $usersArray)->orWhereIn('team_id', $teamsArray)->pluck('id')->toArray();
+        $assignedTo = $task->users()->where('completed', 0)->whereIn('users.id', $usersArray)->orWhereIn('team_id', $teamsArray)->pluck('users.id')->toArray();
 
         // Inverse of the parent function find... Returns users with task assigned for them
         $users = $this->findUsersInverse($usersArray, $assignedTo);
