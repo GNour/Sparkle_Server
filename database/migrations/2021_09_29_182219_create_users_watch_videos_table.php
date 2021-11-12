@@ -15,8 +15,8 @@ class CreateUsersWatchVideosTable extends Migration
     {
         Schema::create('users_watch_videos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("user_id")->constrained("users");
-            $table->foreignId("video_id")->constrained("videos");
+            $table->foreignId("user_id")->constrained("users")->onDelete("cascade");
+            $table->foreignId("video_id")->constrained("videos")->onDelete("cascade");
             $table->boolean("completed")->default(0);
             $table->time("left_at")->nullable();
             $table->timestamps();

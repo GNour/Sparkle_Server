@@ -15,8 +15,8 @@ class CreateUsersReadArticlesTable extends Migration
     {
         Schema::create('users_read_articles', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("user_id")->constrained("users");
-            $table->foreignId("article_id")->constrained("articles");
+            $table->foreignId("user_id")->constrained("users")->onDelete("cascade");
+            $table->foreignId("article_id")->constrained("articles")->onDelete("cascade");
             $table->boolean("completed")->default(0);
             $table->timestamps();
             $table->softDeletes();

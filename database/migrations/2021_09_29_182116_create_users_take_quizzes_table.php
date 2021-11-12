@@ -15,8 +15,8 @@ class CreateUsersTakeQuizzesTable extends Migration
     {
         Schema::create('users_take_quizzes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("user_id")->constrained("users");
-            $table->foreignId("quiz_id")->constrained("quizzes");
+            $table->foreignId("user_id")->constrained("users")->onDelete("cascade");
+            $table->foreignId("quiz_id")->constrained("quizzes")->onDelete("cascade");
             $table->boolean("completed")->default(0);
             $table->integer("grade");
             $table->timestamps();
