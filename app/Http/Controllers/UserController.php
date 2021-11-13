@@ -159,8 +159,8 @@ class UserController extends Controller
                 "courses" => Course::count(),
                 "todos" => [
                     Task::where("taskable_type", "todo")->count(),
-                    Task::whereMonth("created_at", Carbon::now()->format('m'))->count(),
-                    Task::whereDate("created_at", Carbon::today())->count(),
+                    Task::where("taskable_type", "todo")->whereMonth("created_at", Carbon::now()->format('m'))->count(),
+                    Task::where("taskable_type", "todo")->whereDate("created_at", Carbon::today())->count(),
                 ],
                 "tasks" => Task::groupBy("assigned")->select('assigned', DB::raw('count(*) as total'))->get(),
                 "messages" => [
